@@ -8,7 +8,7 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import tech.weinmann.raas.configuration.RpiConfiguration
 
 object DeviceTable: IntIdTable("configurations"){
-    val serial = varchar("serial", 20)
+    val serial = varchar("serial", 20).uniqueIndex()
     val hostname = varchar("hostname", 20)
     val osUrl = varchar("osUrl", 50)
     val owner = varchar("owner", 5)

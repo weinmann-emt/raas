@@ -28,7 +28,7 @@ class DeviceRepoJdbcTest {
 
     @Test
     fun read() = runTest {
-        val ret = dut.read("a1")
+        val ret = dut.read("1a")
         assertEquals("first", ret?.hostname)
     }
 

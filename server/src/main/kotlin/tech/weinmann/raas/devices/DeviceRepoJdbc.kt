@@ -2,6 +2,7 @@ package tech.weinmann.raas.devices
 
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -21,16 +22,11 @@ class DeviceRepoJdbc(database: Database): DeviceRepoInterface {
     }
 
     override suspend fun read(serial: String): RpiConfiguration? = suspendTransaction {
-        val an = DeviceDAO
-            .all()
-            .map(::DaoToDevice)
-        val found = DeviceDAO
+        DeviceDAO
             .find { DeviceTable.serial eq serial }
             .limit(1)
+            .map(::DaoToDevice)
             .firstOrNull()
-        return@suspendTransaction DaoToDevice(found!!)
-
-
     }
 
     override suspend fun list(): List<RpiConfiguration> = suspendTransaction {
@@ -39,11 +35,23 @@ class DeviceRepoJdbc(database: Database): DeviceRepoInterface {
             .map(::DaoToDevice)
     }
 
-    override suspend fun create(serial: String): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun create(config: RpiConfiguration): RpiConfiguration  = suspendTransaction{
+        DaoToDevice(
+            DeviceDAO.new {
+                serial = config.serial
+            }
+        )
     }
 
-    override suspend fun configure(config: RpiConfiguration): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun configure(config: RpiConfiguration): RpiConfiguration = suspendTransaction {
+        DaoToDevice(
+            DeviceDAO.findSingleByAndUpdate(DeviceTable.serial eq config.serial){
+                it.owner = config.owner
+                it.hostname = config.hostname
+                it.osUrl = config.osUrl
+            }!!
+        )
     }
 }
+
+
