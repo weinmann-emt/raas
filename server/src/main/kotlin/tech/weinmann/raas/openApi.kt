@@ -15,22 +15,22 @@ import io.ktor.server.application.*
 
 
 fun Application.openApiGen() {
-    install(SwaggerUI) {
-        // configure basic information about the api
-        info {
-            title = "Example API"
-            description = "An example api to showcase basic swagger-ui functionality."
-        }
-//        // configure the servers from where the api is being served
-//        server {
-//            url = "http://localhost:8080"
-//            description = "Development Server"
+//    install(SwaggerUI) {
+//        // configure basic information about the api
+//        info {
+//            title = "Example API"
+//            description = "An example api to showcase basic swagger-ui functionality."
 //        }
-//        server {
-//            url = "https://www.example.com"
-//            description = "Production Server"
-//        }
-    }
+////        // configure the servers from where the api is being served
+////        server {
+////            url = "http://localhost:8080"
+////            description = "Development Server"
+////        }
+////        server {
+////            url = "https://www.example.com"
+////            description = "Production Server"
+////        }
+//    }
     install(OpenApi)
     routing {
         route("swagger") {
