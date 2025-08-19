@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.ktor.server.openapi)
     implementation(libs.ktor.server.swagger)
     implementation(libs.ktor.server.swaggergen)
+    implementation(libs.ktor.server.openapigen)
 
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
