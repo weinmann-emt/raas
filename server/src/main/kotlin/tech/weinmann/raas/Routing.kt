@@ -15,6 +15,7 @@ import tech.weinmann.raas.devices.DeviceRepoInterface
 import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.*
 import tech.weinmann.raas.configuration.RpiConfiguration
+import io.github.smiley4.ktoropenapi.*
 
 
 fun Application.configureRouting() {
@@ -25,8 +26,26 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
         route("/api/v1"){
-            route ("/machine"){
-                get("{serial}"){
+            route ("/machine", {
+                description = "Operations to be performed by RPI devices"
+                
+            }){
+                get("{serial}", {
+                    description = "Get own configuration or 404"
+                    response {
+                        code(HttpStatusCode.OK) {
+                            body<RpiConfiguration> {
+                                required = true
+                                description = "Your config"
+                            }
+                        }
+                        code(HttpStatusCode.NotFound) {
+                            body<String> {
+                            }
+                        }
+
+                    }
+                }){
                     val serial = call.parameters["serial"]!!
                     val conf = deviceService.read(serial = serial)
                     if (conf != null){
@@ -35,8 +54,23 @@ fun Application.configureRouting() {
                         call.respond(HttpStatusCode.NotFound)
                     }
                 }
-                post<RpiConfiguration> {
-                    deviceService.create(it)
+                post<RpiConfiguration>("", {
+                    description = "Register a new device"
+                    request {
+                        body<RpiConfiguration> {
+
+                        }
+                    }
+                    response {
+                        code(HttpStatusCode.Created) {
+                            body<RpiConfiguration> {  }
+                        }
+                    }
+                }) {
+                    val ret = deviceService.create(it)
+                    call.respond(HttpStatusCode.Created, ret)
+
+                    }
                 }
             }
             // This one need to be protected later
@@ -64,5 +98,5 @@ fun Application.configureRouting() {
         }
         // This is needed to be possible without registration!
 
-    }
 }
+
