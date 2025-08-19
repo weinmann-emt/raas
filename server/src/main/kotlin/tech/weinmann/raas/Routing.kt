@@ -28,7 +28,7 @@ fun Application.configureRouting() {
         route("/api/v1"){
             route ("/machine", {
                 description = "Operations to be performed by RPI devices"
-                
+
             }){
                 get("{serial}", {
                     description = "Get own configuration or 404"
@@ -73,30 +73,56 @@ fun Application.configureRouting() {
                     }
                 }
             }
-            // This one need to be protected later
+            // This one need to be protected later!!
             route("devices"){
-                get(""){
+                get("",{description= "get all devices"}){
                     val list = deviceService.list()
                     call.respond(list)
                 }
-                get("{serial}"){
+                get("{serial}", {
+                        description = "get single device"
+                        response { code(HttpStatusCode.OK){
+                            body<RpiConfiguration> {  }
+                        }
+                    }}){
                     val serial = call.parameters["serial"]!!
                     val conf = deviceService.read(serial = serial)
                     if (conf != null){
-                        call.respond(conf)
+                        call.respond(HttpStatusCode.OK, conf)
                     } else {
                         call.respond(HttpStatusCode.NotFound)
                     }
                 }
-                post<RpiConfiguration> {
-                    deviceService.create(it)
+                post<RpiConfiguration>("", {
+                    description = "create new device"
+                    request {
+                        body<RpiConfiguration> {
+                        }
+                    }
+                    response {
+                        code(HttpStatusCode.Created) {
+                            body<RpiConfiguration> {  }
+                        }
+                    }
+                }) {
+                    val ret = deviceService.create(it)
+                    call.respond(HttpStatusCode.Created, ret)
                 }
-                put<RpiConfiguration> {
+                put<RpiConfiguration>("",{
+                    description = "Update config"
+                    request {
+                        body<RpiConfiguration> {
+                        }
+                    }
+                    response {
+                        code(HttpStatusCode.Created) {
+                            body<RpiConfiguration> {  }
+                        }
+                    }
+                }) {
                     deviceService.configure(it)
                 }
             }
         }
-        // This is needed to be possible without registration!
-
 }
 
