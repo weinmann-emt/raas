@@ -7,11 +7,14 @@ import org.koin.ktor.plugin.*
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.createdAtStart
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import tech.weinmann.raas.auth.AuthProviderFactory
 import tech.weinmann.raas.devices.DeviceRepoInterface
 import tech.weinmann.raas.devices.DeviceRepoJdbc
 
 fun Application.configureDependencies() {
+    val authValues = environment.config.property("authentication").getMap()
     install(Koin) {
         printLogger(Level.DEBUG)
         modules(
@@ -29,7 +32,9 @@ fun Application.configureDependencies() {
                     bind<DeviceRepoInterface>()
                     createdAtStart()
                 }
-
+                single {
+                    AuthProviderFactory.build(authValues)
+                }
             }
         )
     }
