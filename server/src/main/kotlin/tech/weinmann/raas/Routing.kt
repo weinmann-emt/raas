@@ -39,6 +39,28 @@ fun Application.configureRouting() {
                     deviceService.create(it)
                 }
             }
+            // This one need to be protected later
+            route("devices"){
+                get(""){
+                    val list = deviceService.list()
+                    call.respond(list)
+                }
+                get("{serial}"){
+                    val serial = call.parameters["serial"]!!
+                    val conf = deviceService.read(serial = serial)
+                    if (conf != null){
+                        call.respond(conf)
+                    } else {
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                }
+                post<RpiConfiguration> {
+                    deviceService.create(it)
+                }
+                put<RpiConfiguration> {
+                    deviceService.configure(it)
+                }
+            }
         }
         // This is needed to be possible without registration!
 
