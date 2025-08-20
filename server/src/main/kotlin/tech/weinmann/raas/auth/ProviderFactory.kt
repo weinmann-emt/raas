@@ -8,11 +8,8 @@ class AuthProviderFactory {
             val jwt = config["jwt"] as Map<*, *>
             if (backend["provider"] == "ldap"){
                 return LdapProvider(
-                    jwt["audience"].toString(),
-                    issuer = jwt["issuer"].toString(),
-                    secret = jwt["secret"].toString(),
-                    ldap_address = backend["ldap_address"].toString(),
-                    base_dn = backend["base_dn"].toString(),
+                    backend,
+                    jwt
                 )
             }
             return null

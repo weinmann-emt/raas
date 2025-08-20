@@ -32,8 +32,10 @@ ktor-server-swaggergen = {module = "io.github.smiley4:ktor-swagger-ui", version.
 ktor-server-openapigen = { module ="io.github.smiley4:ktor-openapi",  version.ref ="openapi"  }
 
 ktor-server-auth = { module ="io.ktor:ktor-server-auth",  version.ref ="ktor"  }
-ktor-server-auth-ldap = { module= "io.ktor:ktor-server-auth-ldap",  version.ref ="ktor"  }
 ktor-server-auth-jwt = { module= "io.ktor:ktor-server-auth-jwt",  version.ref ="ktor"  }
+
+ldap-apache = { module= "org.apache.directory.api:api-all",  version = "2.1.7"  }
+ldap-id = { module= "com.unboundid:unboundid-ldapsdk",  version = "7.0.3"  }
 
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }

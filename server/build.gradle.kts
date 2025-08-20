@@ -29,8 +29,10 @@ dependencies {
     implementation(libs.ktor.server.swaggergen)
     implementation(libs.ktor.server.openapigen)
     implementation(libs.ktor.server.auth)
-    implementation(libs.ktor.server.auth.ldap)
     implementation(libs.ktor.server.auth.jwt)
+
+    implementation(libs.ldap.apache)
+    implementation(libs.ldap.id)
 
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)

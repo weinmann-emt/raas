@@ -12,11 +12,21 @@ import tech.weinmann.raas.database.DeviceTable
 import kotlin.test.BeforeTest
 
 class AuthProviderFactoryTest {
+    val config: ApplicationConfig = ApplicationConfig("application.yaml")
+    val authValues = config.property("authentication").getMap()
+
     @Test
     fun factory(){
-        val config = ApplicationConfig("application.yaml")
-        val authValues = config.property("authentication").getMap()
+
         val dut = AuthProviderFactory.build(authValues)
         assertTrue { dut is LdapProvider }
+    }
+
+    @Test
+    fun login(){
+        val user = System.getenv("LDAP_USERNAME")
+        val passwd = System.getenv("LDAP_PASSWORD")
+        val dut = AuthProviderFactory.build(authValues)
+        dut!!.login(user, passwd)
     }
 }
