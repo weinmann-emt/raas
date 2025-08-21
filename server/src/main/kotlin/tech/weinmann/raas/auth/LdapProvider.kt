@@ -101,3 +101,4 @@ class LdapProvider(private val ldapConfig: Map<*, *>, private val jwtConfig: Map
             .sign(Algorithm.HMAC256(jwtConfig["secret"]as String?))
     }
 }
+
