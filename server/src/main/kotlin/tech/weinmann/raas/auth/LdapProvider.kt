@@ -27,11 +27,15 @@ class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Ma
         if (bind_pass?.lowercase() == "env"){
             bind_pass = System.getenv("LDAP_BIND_PASS")
         }
+        var bind_user = ldapConfig["bind_user"] as String?
+        if (bind_pass?.lowercase() == "env"){
+            bind_pass = System.getenv("LDAP_BIND_USER")
+        }
         val env = Hashtable<String, String>()
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.SECURITY_AUTHENTICATION, "simple")
         env.put(Context.PROVIDER_URL, ldapConfig["address"] as String?);
-        env.put(Context.SECURITY_PRINCIPAL, ldapConfig["bind_user"] as String?);
+        env.put(Context.SECURITY_PRINCIPAL, bind_user);
         env.put(Context.SECURITY_CREDENTIALS, bind_pass);
 
         try {

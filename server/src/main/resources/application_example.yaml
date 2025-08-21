@@ -1,0 +1,23 @@
+ktor:
+  application:
+    modules:
+      - tech.weinmann.raas.ApplicationKt.module
+  deployment:
+    port: 8080
+database:
+  url: "jdbc:h2:mem:fake;DB_CLOSE_DELAY=-1"
+  user: "root"
+  driver: "org.h2.Driver"
+  password: ""
+authentication:
+  backend:
+    provider: "ldap"
+    address: "address"
+    base_dn: "domain"
+    bind_user: "ENV"
+    bind_pass: "ENV"
+  jwt:
+    secret: "secret"
+    issuer: "http://0.0.0.0:8080/"
+    audience: "http://0.0.0.0:8080/hello"
+    realm: "Access to 'hello'"
