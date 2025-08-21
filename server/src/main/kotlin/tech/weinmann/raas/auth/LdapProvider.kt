@@ -85,7 +85,7 @@ class LdapProvider(override val backendConfig: Map<*, *>, override val jwtConfig
         }
     }
 
-    override fun login(user: User): String? {
+    override fun login(user: User): Map<String, String>? {
         if(!this::ctx.isInitialized){
             connect()
         }
@@ -96,7 +96,8 @@ class LdapProvider(override val backendConfig: Map<*, *>, override val jwtConfig
             return null
         }
         val roles = getRoles()
-        return generateToken(user.username, roles)
+        return generatePair(user.username, roles, 60)
+
     }
 }
 

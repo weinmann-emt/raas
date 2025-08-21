@@ -4,11 +4,13 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import io.github.smiley4.ktoropenapi.get
 import io.github.smiley4.ktoropenapi.post
+import io.github.smiley4.ktorswaggerui.data.ref
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.request.*
 import io.ktor.server.response.respond
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
@@ -44,6 +46,36 @@ fun Application.configureAuth(){
     }
     routing {
         route("/api/v1/auth"){
+            post<String>("/refresh", {
+                description = "refresh the toke"
+                request { body<String>{
+
+                } }
+                response {
+                    code(HttpStatusCode.OK){
+                        body<Map<String, String>>{
+                            description = "Token Updated"
+                        }
+                    }
+                    code(HttpStatusCode.Unauthorized) {
+                        body<Map<String, String>>{
+                            description = "Token not updated"
+                        }
+                    }
+                }
+            }){
+                try{
+                    val deb = authService.refreshToken(it)
+                    call.respond(HttpStatusCode.OK,
+                    authService.refreshToken(it)
+                    )
+                } catch(ex: Exception) {
+                    call.respond(HttpStatusCode.Unauthorized
+                    )
+                }
+
+
+            }
             post<User>("", {
                 description = "Login and get token"
                 request {
