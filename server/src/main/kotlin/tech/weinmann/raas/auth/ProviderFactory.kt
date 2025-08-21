@@ -6,11 +6,9 @@ class AuthProviderFactory {
 
             val backend = config["backend"] as Map<*, *>
             val jwt = config["jwt"] as Map<*, *>
-            if (backend["provider"] == "ldap"){
-                return LdapProvider(
-                    backend,
-                    jwt
-                )
+            when(backend["provider"]){
+                "ldap" -> return LdapProvider(backend, jwt)
+                "fake" -> return FakeProvider(backend, jwt)
             }
             return null
         }

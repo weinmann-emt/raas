@@ -14,8 +14,9 @@ import javax.naming.ldap.LdapContext
 
 
 
-class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Map<*, *>) : AuthProviderInterface {
+class LdapProvider(override val backendConfig: Map<*, *>, override val jwtConfig: Map<*, *>) : AuthProviderInterface, TokenGenerator(){
     lateinit var ctx: InitialDirContext
+    
 
     private fun connect(){
         System.setProperty("javax.net.ssl.keyStore", "NONE");
@@ -23,18 +24,18 @@ class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Ma
         System.setProperty("javax.net.ssl.trustStore", "NONE");
         System.setProperty("javax.net.ssl.trustStoreType", "Windows-ROOT");
         // Check is the passwd is an env var
-        var bind_pass = ldapConfig["bind_pass"] as String?
+        var bind_pass = backendConfig["bind_pass"] as String?
         if (bind_pass?.lowercase() == "env"){
             bind_pass = System.getenv("LDAP_BIND_PASS")
         }
-        var bind_user = ldapConfig["bind_user"] as String?
+        var bind_user = backendConfig["bind_user"] as String?
         if (bind_pass?.lowercase() == "env"){
             bind_pass = System.getenv("LDAP_BIND_USER")
         }
         val env = Hashtable<String, String>()
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.SECURITY_AUTHENTICATION, "simple")
-        env.put(Context.PROVIDER_URL, ldapConfig["address"] as String?);
+        env.put(Context.PROVIDER_URL, backendConfig["address"] as String?);
         env.put(Context.SECURITY_PRINCIPAL, bind_user);
         env.put(Context.SECURITY_CREDENTIALS, bind_pass);
 
@@ -52,7 +53,7 @@ class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Ma
 
         val result: NamingEnumeration<*>? =
             ctx.search(
-                ldapConfig["base_dn"] as String?,
+                backendConfig["base_dn"] as String?,
                 "(&(objectClass=person)(sAMAccountName=$username))",
                 searchControls
             )
@@ -73,7 +74,7 @@ class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Ma
         val env = Hashtable<String, String>()
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.SECURITY_AUTHENTICATION, "simple")
-        env.put(Context.PROVIDER_URL, ldapConfig["address"] as String?);
+        env.put(Context.PROVIDER_URL, backendConfig["address"] as String?);
         env.put(Context.SECURITY_PRINCIPAL, dn);
         env.put(Context.SECURITY_CREDENTIALS, pass);
 
@@ -95,14 +96,7 @@ class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Ma
             return null
         }
         val roles = getRoles()
-
-        return JWT.create()
-            .withAudience(jwtConfig["audience"]as String?)
-            .withIssuer(jwtConfig["issuer"]as String?)
-            .withClaim("username", user.username)
-            .withClaim("roles", roles)
-            .withExpiresAt(Date(System.currentTimeMillis() + 60000))
-            .sign(Algorithm.HMAC256(jwtConfig["secret"]as String?))
+        return generateToken(user.username, roles)
     }
 }
 
