@@ -1,5 +1,6 @@
 package tech.weinmann.raas.auth
 
 interface AuthProviderInterface {
-    fun login(username: String, password: String):String?
+    val jwtConfig: Map<*, *>
+    fun login(user: User):String?
 }

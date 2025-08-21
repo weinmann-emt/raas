@@ -14,7 +14,7 @@ import javax.naming.ldap.LdapContext
 
 
 
-class LdapProvider(private val ldapConfig: Map<*, *>, private val jwtConfig: Map<*, *>) : AuthProviderInterface {
+class LdapProvider(private val ldapConfig: Map<*, *>, override val jwtConfig: Map<*, *>) : AuthProviderInterface {
     lateinit var ctx: InitialDirContext
 
     private fun connect(){
@@ -80,13 +80,13 @@ class LdapProvider(private val ldapConfig: Map<*, *>, private val jwtConfig: Map
         }
     }
 
-    override fun login(username: String, password: String): String? {
+    override fun login(user: User): String? {
         if(!this::ctx.isInitialized){
             connect()
         }
-        val cn =getUserObject(username)
         try {
-            authenticate(cn, password)
+            val cn =getUserObject(user.username)
+            authenticate(cn, user.password)
         } catch (ex: NamingException) {
             return null
         }
@@ -95,7 +95,7 @@ class LdapProvider(private val ldapConfig: Map<*, *>, private val jwtConfig: Map
         return JWT.create()
             .withAudience(jwtConfig["audience"]as String?)
             .withIssuer(jwtConfig["issuer"]as String?)
-            .withClaim("username", username)
+            .withClaim("username", user.username)
             .withClaim("roles", roles)
             .withExpiresAt(Date(System.currentTimeMillis() + 60000))
             .sign(Algorithm.HMAC256(jwtConfig["secret"]as String?))

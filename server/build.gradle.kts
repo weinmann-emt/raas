@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.serialization)
     application
 }
 
@@ -30,7 +31,7 @@ dependencies {
     implementation(libs.ktor.server.openapigen)
     implementation(libs.ktor.server.auth)
     implementation(libs.ktor.server.auth.jwt)
-
+    implementation(libs.ktor.serialization)
     implementation(libs.ldap.apache)
     implementation(libs.ldap.id)
 
