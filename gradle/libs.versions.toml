@@ -30,12 +30,22 @@ ktor-server-openapi = { module = "io.ktor:ktor-server-openapi", version.ref = "k
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger-jvm", version.ref = "ktor" }
 ktor-server-swaggergen = {module = "io.github.smiley4:ktor-swagger-ui", version.ref = "swagger-gen"}
 
+ktor-server-openapigen = { module ="io.github.smiley4:ktor-openapi",  version.ref ="openapi"  }
+
+ktor-server-auth = { module ="io.ktor:ktor-server-auth",  version.ref ="ktor"  }
+ktor-server-auth-jwt = { module= "io.ktor:ktor-server-auth-jwt",  version.ref ="ktor"  }
+
+ldap-apache = { module= "org.apache.directory.api:api-all",  version = "2.1.7"  }
+ldap-id = { module= "com.unboundid:unboundid-ldapsdk",  version = "7.0.3"  }
+
+
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
 
 ktor-configYaml = { module = "io.ktor:ktor-server-config-yaml", version.ref = "ktor" }
 ktor-contentNegotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+
 
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
@@ -47,8 +57,8 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 ktor-client-core = { module ="io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-content = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 
-ktor-server-openapigen = { module ="io.github.smiley4:ktor-openapi",  version.ref ="openapi"  }
 
+ktor-server-openapigen = { module ="io.github.smiley4:ktor-openapi",  version.ref ="openapi"  }
 
 [plugins]
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }

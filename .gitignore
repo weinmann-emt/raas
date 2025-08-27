@@ -16,3 +16,5 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
+/server/src/test/resources/application.yaml
+/server/src/main/resources/application.yaml
