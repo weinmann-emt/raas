@@ -85,7 +85,7 @@ fun Application.configureAuth(){
                 }
                 response {
                     code(HttpStatusCode.OK) {
-                        body<String> {  }
+                        body< Map<String, String>?> {  }
                     }
                     code(HttpStatusCode.Unauthorized) {
                         description = "User not allowed"
