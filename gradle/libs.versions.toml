@@ -57,9 +57,6 @@ ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", versi
 ktor-client-core = { module ="io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-content = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 
-
-ktor-server-openapigen = { module ="io.github.smiley4:ktor-openapi",  version.ref ="openapi"  }
-
 [plugins]
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
