@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinJvm)
     alias(libs.plugins.ktor)
+
     alias(libs.plugins.serialization)
     application
 }
@@ -34,6 +35,7 @@ dependencies {
     implementation(libs.ktor.serialization)
     implementation(libs.ldap.apache)
     implementation(libs.ldap.id)
+
 
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)

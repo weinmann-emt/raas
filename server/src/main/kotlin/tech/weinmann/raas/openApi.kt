@@ -1,6 +1,7 @@
 package tech.weinmann.raas
 
 import io.github.smiley4.ktoropenapi.OpenApi
+
 import io.github.smiley4.ktoropenapi.config.AuthScheme
 import io.github.smiley4.ktoropenapi.config.AuthType
 import io.github.smiley4.ktoropenapi.openApi
@@ -27,6 +28,7 @@ fun Application.openApiGen() {
             }
         }
     }
+
     routing {
         route("swagger") {
             swaggerUI("/api.json")
@@ -36,6 +38,8 @@ fun Application.openApiGen() {
         }
 
     }
+
 }
 
 class AuthRequired(val message: String)
+
