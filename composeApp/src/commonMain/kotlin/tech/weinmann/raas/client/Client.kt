@@ -12,16 +12,21 @@ import io.ktor.http.contentType
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.json
 
-class Client(base: String) {
+class Client(private val base: String) {
     private var client = HttpClient(){
+        install(ContentNegotiation) {
+            json()
+        }
         defaultRequest {
-            url("$base/api/v1")
+            url("$base/api/v1/")
         }
     }
     suspend fun login(username: String, password: String) {
         val login = User(username, password)
-        val response = client.post("/auth"){
+        val response = client.post("auth"){
             contentType(ContentType.Application.Json)
             setBody(login)
         }
@@ -30,6 +35,12 @@ class Client(base: String) {
         }
         val tokens = response.body< Map<String, String>?>()
         client = HttpClient(){
+            install(ContentNegotiation) {
+                json()
+            }
+            defaultRequest {
+                url("$base/api/v1/")
+            }
             install(Auth){
                 bearer{
                     loadTokens {
@@ -39,5 +50,4 @@ class Client(base: String) {
             }
         }
     }
-
 }

@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.serialization)
+
 }
 
 kotlin {
@@ -45,6 +47,9 @@ kotlin {
             implementation(projects.shared)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.content)
+            implementation(libs.ktor.serialization)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -54,6 +59,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
             implementation(libs.ktor.client.cio)
+
         }
     }
 }
