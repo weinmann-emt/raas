@@ -13,6 +13,9 @@ import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.get
+import io.ktor.client.request.put
+import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.kotlinx.json.json
 
 class Client(private val base: String) {
@@ -24,6 +27,7 @@ class Client(private val base: String) {
             url("$base/api/v1/")
         }
     }
+
     suspend fun login(username: String, password: String) {
         val login = User(username, password)
         val response = client.post("auth"){
@@ -50,4 +54,15 @@ class Client(private val base: String) {
             }
         }
     }
+
+    suspend fun get(endpoint: String): HttpResponse = client.get(endpoint)
+    suspend fun post(endpoint: String, body: Any): HttpResponse = client.post(endpoint) {
+        contentType(ContentType.Application.Json)
+        setBody(body)
+    }
+    suspend fun put(endpoint: String, body: Any): HttpResponse = client.put(endpoint) {
+        contentType(ContentType.Application.Json)
+        setBody(body)
+    }
+
 }
